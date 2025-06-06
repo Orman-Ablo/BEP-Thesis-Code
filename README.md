@@ -44,3 +44,5 @@ Rieger, B., Stallinga, S., Ligteringen, R., Droste, I., Martens, K., & Höppener
 torfit: Matlab implementation of the vector fitting method [Accessed: 2025-06-03].
 https://gitlab.tudelft.nl/imphys/ci/vectorfit
 
+
+P.S. if the OTF fit fails to properly run after the initial fit, remove the vectorfit master from your directory: certain files could be modified from previous versions. 
