@@ -1,8 +1,10 @@
 # BEP-Thesis-Code
 A collection of Code used to Produce the OTF fitting Routine used in the BEP thesis
 
-In order to ise The second fit, Follow the pipeline set for the 'vectorfit' Project:
+In order to use The second fit, Follow the pipeline set for the 'vectorfit' Project:
 https://gitlab.tudelft.nl/imphys/ci/vectorfit
+
+Alternatively, the code for the 'Vectorfit' Project can be found in the 'vectorfit-master'.zip folder.
 
 
 Once you have collected the initial fit of your localizations, follow the Pipeline for the OTF fit:
