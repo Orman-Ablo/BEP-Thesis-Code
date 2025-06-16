@@ -12,7 +12,7 @@ Once you have collected the initial fit of your localizations, follow the Pipeli
 1. run the file 'combined_locations', which isolates the localizations of all ROIs
 2. run 'PSF_data': it produces the 3-D stacks of the PSFs required for the 3-D OTF. you can change the upscaling factor to  produce finer/rougher sampling of the PSF.
 3. run 'Plot_PSF_Results': this file produces the used 3-D OTF, and plots the shapes of the PSFs and OTFs. You can define here the desired size of the OTF
-4. run 'localize_otfmode_remove_outliers': it is a modified copy of the 'localize'file used in the initial fit. It should be albe to run both the initial and second fit.
+4. run 'OTF_fit_scale': it is a modified copy of the 'localize'file used in the initial fit. It should be albe to run both the initial and second fit.
 
 If you want to produce any of the plots used in the report, their pipeline is listed below:
 
@@ -22,7 +22,9 @@ CRLB:
 
 FOV image:
 1. run 'combined locations'
+
 2a. run 'compare_original_model': it produces the zoomed-in images of the FOV, and the colocalization. you can change the region that is zoomed in by changing the pixel limits
+
 2b. run 'Run_combined_locations': Produces the full FOV images of the HeLa Cells.
 
 Histograms (localizations):
@@ -43,6 +45,10 @@ All files or folders that are direct copies of 'vectorfit' have 'copy' added to 
 Rieger, B., Stallinga, S., Ligteringen, R., Droste, I., Martens, K., & Höppener, T. (2024). Vec-
 torfit: Matlab implementation of the vector fitting method [Accessed: 2025-06-03].
 https://gitlab.tudelft.nl/imphys/ci/vectorfit
+
+The Dipimage library is used to visualize certain results. 
+Luengo, C., & contributors. (2024). Diplib: Quantitative image analysis in c++, matlab and
+python [Accessed: 2025-06-03]. https://github.com/DIPlib/diplib
 
 
 P.S. if the OTF fit fails to properly run after the initial fit, remove the vectorfit master from your directory: certain files could be modified from previous versions. 
