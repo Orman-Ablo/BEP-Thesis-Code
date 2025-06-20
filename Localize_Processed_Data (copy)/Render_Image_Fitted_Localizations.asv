@@ -1,0 +1,46 @@
+%Just to visualize the acquired data independently
+
+clear all
+close all
+
+input = "C:\Users\Naam\Documents\BEP\Code\vectorfit-master\vectorfit-master\BEP Code Roman\Data_BEP_Roman\5_Localize\localization_ Fitted_Data_localization_segmentation_microtubules_3D_data0001.mat";
+
+params = set_parameters_microtubules_3D;
+
+Input_pro
+filename = input.name; 
+foldername = input.folder;
+path_input_data_full = fullfile(foldername, filename);    
+fprintf('Input Localized and Fitted data = %s\n',path_input_data_full);
+
+loaded_data = load(input);
+allspots = loaded_data.allspots;
+roixy = loaded_data.roixy;
+framelist = loaded_data.framelist;
+ID = loaded_data.ID;
+
+    params.select_spots = false;
+    Ncfg_total = size(allspots,4);
+    params.Ncfg_total = Ncfg_total;
+    params.Ncfg_global = Ncfg_total;
+    params.Ncfg = Ncfg_total;
+
+%% Render final image
+if params.show_plots
+    x1 = localizations(:,2);
+    y1 = localizations(:,3);
+    z1  = localizations(:,4);
+    
+    locations = [x1 y1 z1];
+   
+    ncolors = 19;
+    colorrange = [-500,400];
+    
+    xlim = [0.0 1.0];
+    ylim = [0.0 1.0];
+    pixelsize = 50
+
+    sigma = 2.0;
+    clim = 0.95; % the brightest (1-clim) fraction of pixels gets clipped 
+    render_3D_func(locations,ncolors,colorrange,xlim,ylim,pixelsize,sigma,clim,params);
+end
