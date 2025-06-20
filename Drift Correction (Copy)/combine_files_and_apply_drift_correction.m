@@ -1,0 +1,111 @@
+%% Combine localizations from multiple files into one file
+%input_path = 'C:\Users\Naam\Documents\BEP\data\second_fit\';
+%input_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\Extra input data\transfer_3055388_files_4e4cf1e2\";
+%input_path = 'C:\Users\Naam\Documents\BEP\BEP Code Roman\data\Localize\';
+input_path = 'C:\Users\Naam\Documents\BEP\BEP Code Roman\data\Final_Localization\';
+
+output_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\data\Combined\";
+input_folder_combine = strcat(input_path,'localization*');
+output_path_final = strcat(output_path,'localization_combined_second_fit_scaled.mat');
+
+all_input_files = dir(input_folder_combine);
+all_input_files = all_input_files(~[all_input_files.isdir]);
+
+nr_of_files = size(all_input_files,1);
+fprintf('Found %i files\n',nr_of_files);
+
+localizations = [];
+roixy = [];
+Ncfg_total = 0;
+thetax = [];
+thetay =[];
+thetaz = [];
+
+mu = [];
+Spots_fit = [];
+
+for file_i= 1:nr_of_files
+
+    % Load data
+    filename = all_input_files(file_i).name; 
+    foldername = all_input_files(file_i).folder;
+    path_input_data_full = fullfile(foldername, filename);    
+    fprintf('Input data = %s\n',path_input_data_full);
+    loaded_data = load(path_input_data_full);
+
+    outliers = loaded_data.outliers;
+    
+    theta_update = loaded_data.theta_update;
+
+    filter = loaded_data.merit;
+    locindex_file = 1:size(filter,1);
+    masklocs = setdiff(locindex_file,outliers);
+
+    % filter all non-outlier valuse for the statistics
+    x_theta = theta_update(1,masklocs);
+    y_theta = theta_update(2,masklocs);
+    z_theta = theta_update(3,masklocs);
+
+    thetax = [thetax x_theta];
+    thetay = [thetay y_theta];
+    thetaz = [thetaz z_theta];
+
+    localizations_temp = loaded_data.localizations;
+    roixy_temp = loaded_data.roixy_fit;%roixy_fit for the OTF fit or roixy for the initial fit
+    params = loaded_data.params;
+
+    roixy_temp = roixy_temp(:,masklocs); % filter all non-outlier valuse for the statistics
+
+    localizations = cat(1,localizations,localizations_temp);
+    roixy = cat(2,roixy,roixy_temp);
+
+
+   
+end
+theta = [thetax; thetay; thetaz;];
+
+
+%% Apply drift correction
+
+path_drift = "C:\Users\Naam\Documents\BEP\BEP Code Roman\Drift Correction (copy)\drift_corrected_locs_Lidke_microtubule_3D_data.mat";
+drift_data = load(path_drift);
+drift = drift_data.drift;
+
+localizations_drift_corrected = localizations;
+
+sz = size(localizations_drift_corrected);
+for ii=1:sz(1)
+    t = localizations(ii,5);
+    localizations_drift_corrected(ii,2) = localizations_drift_corrected(ii,2) - drift(t,1);
+    localizations_drift_corrected(ii,3) = localizations_drift_corrected(ii,3) - drift(t,2);
+    localizations_drift_corrected(ii,4) = localizations_drift_corrected(ii,4) - drift(t,3);
+end
+save(output_path_final,'localizations_drift_corrected','roixy','theta','params')
+
+
+for file_i= 1:nr_of_files
+
+    % Load data
+    filename = all_input_files(file_i).name; 
+    foldername = all_input_files(file_i).folder;
+    path_input_data_full = fullfile(foldername, filename);    
+    fprintf('Input data = %s\n',path_input_data_full);
+    loaded_data = load(path_input_data_full);
+
+    outliers = loaded_data.outliers;
+    spots_temp = loaded_data.Spots_fit;
+    mu_temp = loaded_data.mu;
+
+    filter = loaded_data.merit;
+    locindex_file = 1:size(filter,1);
+    masklocs = setdiff(locindex_file,outliers);
+
+    spots_temp = spots_temp(:,:,:,masklocs);
+    mu_temp = mu_temp(:,:,:,masklocs);
+
+    params = loaded_data.params;
+    Spots_fit = cat(4,Spots_fit,spots_temp); %too much data, store in a seperate file?
+    mu = cat(4,mu,mu_temp); 
+end
+
+save(output_path_final,'model_and_data_spots_combined','mu','Spots_fit','params')
