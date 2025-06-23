@@ -55,11 +55,18 @@ https://www.mathworks.com
 
 alongside certain toolboxes:
 DIPimage, a scientific image analysis toolbox         Version 2.9                       License unknown
+
 DIPlib, a scientific image analysis library           Version 2.9                       License unknown
+
 Image Processing Toolbox                              Version 24.2        (R2024b)      License 329139 
+
 Parallel Computing Toolbox                            Version 24.2        (R2024b)      License 329139 
+
 Signal Processing Toolbox                             Version 24.2        (R2024b)      License 329139 
+
 Statistics and Machine Learning Toolbox               Version 24.2        (R2024b)      License 329139 
+
 Vehicle Network Toolbox                               Version 24.2        (R2024b)      License 329139 
+
 
 P.S. if the OTF fit fails to properly run after the initial fit, remove the vectorfit master from your directory: certain files could be modified from previous versions. 
