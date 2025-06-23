@@ -9,11 +9,10 @@ Alternatively, the code for the 'Vectorfit' Project can be found in the 'vectorf
 
 Once you have collected the initial fit of your localizations, follow the Pipeline for the OTF fit:
 
-1. run the file 'combined_locations', which isolates the localizations of all ROIs
-2. run 'PSF_data': it produces the 3-D stacks of the PSFs required for the 3-D OTF. you can change the upscaling factor to  produce finer/rougher sampling of the PSF.
-3. run 'Plot_PSF_Results': this file produces the used 3-D OTF, and plots the shapes of the PSFs and OTFs. You can define here the desired size of the OTF
-4. run 'OTF_Fit_All': it is a modified copy of the 'localize'file used in the initial fit. It should be albe to run both the initial and second fit.
-
+1. run the file 'combining_locations.m' or 'combined_locations.m';, which isolate the localizations of all ROIs. 
+2. run 'PSF_data.m': it produces the 3-D stacks of the PSFs required for the 3-D OTF. you can change the upscaling factor to  produce finer/rougher sampling of the PSF. You need to add in the combined locations first.
+3. run 'Plot_PSF_Results.m': this file produces the used 3-D OTF, and plots the shapes of the PSFs and OTFs. You can define here the desired size of the OTF
+4. run 'OTF_Fit_All.m': it is a modified copy of the 'localize.m'file used in the initial fit. Set params.mult_run and params.FlagOTF as true to run the OTF fit.
 If you want to produce any of the plots used in the report, their pipeline is listed below:
 
 CRLB:
@@ -50,5 +49,17 @@ The Dipimage library is used to visualize certain results.
 Luengo, C., & contributors. (2024). Diplib: Quantitative image analysis in c++, matlab and
 python [Accessed: 2025-06-03]. https://github.com/DIPlib/diplib
 
+The OTF fit was run in matlab:
+Inc., T. M. (2024). Matlab version: 24.2.0.2833386 (r2024b). Natick, Massachusetts, United States.
+https://www.mathworks.com
+
+alongside certain toolboxes:
+DIPimage, a scientific image analysis toolbox         Version 2.9                       License unknown
+DIPlib, a scientific image analysis library           Version 2.9                       License unknown
+Image Processing Toolbox                              Version 24.2        (R2024b)      License 329139 
+Parallel Computing Toolbox                            Version 24.2        (R2024b)      License 329139 
+Signal Processing Toolbox                             Version 24.2        (R2024b)      License 329139 
+Statistics and Machine Learning Toolbox               Version 24.2        (R2024b)      License 329139 
+Vehicle Network Toolbox                               Version 24.2        (R2024b)      License 329139 
 
 P.S. if the OTF fit fails to properly run after the initial fit, remove the vectorfit master from your directory: certain files could be modified from previous versions. 
