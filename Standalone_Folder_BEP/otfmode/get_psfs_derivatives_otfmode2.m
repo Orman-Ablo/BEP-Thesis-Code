@@ -47,10 +47,12 @@ XYOTF = -OTFSize+DxyOTF/2:DxyOTF:OTFSize;
 % calculate auxiliary vectors for chirpz
 % [Ax,Bx,Dx] = prechirpz(OTFSize,ROISizex,Notf,Mx);
 % [Ay,By,Dy] = prechirpz(OTFSize,ROISizey,Notf,My);
+%%%%%%%%%%%%%%%%%%%%%%%
+% All prechirpz are the same: compute once beforehand!
 allA = parameters.allA;
 allB = parameters.allB;
 allD = parameters.allD;
-
+%%%%%%%%%%%%%%%%%%%%%%%
 % compute 2D-OTF from 3D-OTF and z-derivative in case fitmodel='xyz'
 switch parameters.fitmodel
   case 'xyz'

@@ -64,7 +64,7 @@ y_locs = theta_local(2,:) + roiy * params.pixelsize;  % Fixed: use theta_local(2
 x_patches = NaN(1, Ncfg);
 y_patches = NaN(1, Ncfg);
 
-% Vectorized patch finding for X
+% find x-patch
 for i = 1:Ncfg
     if x_locs(i) < Xpatch(1)
         x_patches(i) = 1;
@@ -76,7 +76,7 @@ for i = 1:Ncfg
     end
 end
 
-% Vectorized patch finding for Y
+% find y-patch
 for i = 1:Ncfg
     if y_locs(i) < Ypatch(1)
         y_patches(i) = 1;
@@ -88,9 +88,6 @@ for i = 1:Ncfg
          y_patches(i) = patch_idx;
     end
 end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %parfor jcfg = 1:Ncfg
@@ -136,69 +133,6 @@ parfor jcfg = 1:Ncfg
     % end
     %params.OTF = false;
 
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    %% xy-limits (accessed to determine the appropriate OTF patch for the position)
-    % roix = roixy(1,jcfg);
-    % roiy = roixy(2,jcfg);
-    % x_loc = theta(1)+roix*params.pixelsize;% keep the row constant, but use a variable for the columns
-    % y_loc = theta(2)+roiy*params.pixelsize;
-    % % Localizations (xy) = thetaUpdate (xy)+roixy*pixelsize
-
-
-    % %% for each spot, the OTF is found ONCE: This means that as long as the right localization file was used, NO points 'should' fall outside the bound
-    % %
-    % x_patch = NaN;
-    % y_patch = NaN;
-    % % If localizations fall outside of the OTF limits, go to the closest
-    % % OTF.
-    % if (x_loc<Xpatch(1))
-    %     x_patch = 1
-    % elseif(x_loc>Xpatch(end))
-    %     x_patch = Npatch
-    % else
-    %     for ix = 1:Npatch
-    %         if (x_loc>=Xpatch(ix))&&(x_loc<=Xpatch(ix+1))
-    %             x_patch = ix;
-    %             break
-    % 
-    %         end
-    %     end
-    % end
-    % 
-    % for ix = 1:Npatch
-    %     if (x_loc>=Xpatch(ix))&&(x_loc<=Xpatch(ix+1))
-    %         x_patch = ix;
-    %         break
-    % 
-    %     end
-    % end
-    % 
-    % if (y_loc<Ypatch(1))
-    %     y_patch = 1
-    % 
-    % elseif(y_loc>Ypatch(end))
-    %     y_patch = Npatch
-    % 
-    % else
-    % for iy = 1:Npatch
-    %     if (y_loc>=Ypatch(iy))&&(y_loc<=Ypatch(iy+1))
-    %         y_patch = iy;
-    %         break
-    %     end
-    % end
-    % 
-    % end
-    % if isnan(x_patch) || isnan(y_patch)
-    %     error('Patch index not found! x_loc=%.2f, y_loc=%.2f', x_loc, y_loc);
-    % end
-    % 
-    % 
-    % % selecting the right OTF for the position
-    % OTF = OTF_3d(:,:,:,x_patch,y_patch);
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [mu,dmudtheta] = poissonrate_otfmode2(params,theta,OTF,intensity); % modified Poissonrate file, to work with OTF
     [merit,grad,Hessian] = likelihood(params,spot,mu,dmudtheta,varfit);
     meritprev = merit;
@@ -222,9 +156,6 @@ parfor jcfg = 1:Ncfg
         %fprintf('spot %i iter %i\n',jcfg,iiter);
 
 
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
          
         % update parameters
         [thetatry,~] = thetaupdate(theta,thetamax,thetamin,thetaretry,grad,Hessian,alambda,params);
@@ -250,13 +181,13 @@ parfor jcfg = 1:Ncfg
             meritprev = merit;
             thetaretry = theta;
         end
-
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % if params.check_test
         %     PSF_store(:,:,iiter+1,jcfg) = mu;
         %     pos_store(iiter+1,:,jcfg) = theta(1:3);
         %     grad_store(jcfg,iiter+1,:) = grad;
         % end 
-    
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Store values and update counter
         thetastore_local_temp(:,jcfg) = theta;
         meritstore_local_temp(jcfg) = merit;

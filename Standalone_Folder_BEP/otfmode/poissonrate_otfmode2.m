@@ -9,7 +9,7 @@ K = params.K;
 Mx = params.Mx;
 My = params.My;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Add in the 'compders' parameter for the PSF!
+% Add in the 'compders' parameter for the OTF fit!
 compders = params.compders;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fitmodel = params.fitmodel;
@@ -150,6 +150,7 @@ end
 [PSF,PSFder] = get_psfs_derivatives_otfmode2(OTF,params,compders);
 % disp(sum(PSF,'all'))
 
+%% this produces the post-computation PSF and derivative scaling
 pos = params.pos; % pixel position
 Zpatch =params.Zpatch;
 dz = Zpatch(2)-Zpatch(1); % z- interval size
