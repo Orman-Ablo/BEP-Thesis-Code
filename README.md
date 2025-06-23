@@ -12,7 +12,7 @@ Once you have collected the initial fit of your localizations, follow the Pipeli
 1. run the file 'combined_locations', which isolates the localizations of all ROIs
 2. run 'PSF_data': it produces the 3-D stacks of the PSFs required for the 3-D OTF. you can change the upscaling factor to  produce finer/rougher sampling of the PSF.
 3. run 'Plot_PSF_Results': this file produces the used 3-D OTF, and plots the shapes of the PSFs and OTFs. You can define here the desired size of the OTF
-4. run 'OTF_fit_scale': it is a modified copy of the 'localize'file used in the initial fit. It should be albe to run both the initial and second fit.
+4. run 'OTF_Fit_All': it is a modified copy of the 'localize'file used in the initial fit. It should be albe to run both the initial and second fit.
 
 If you want to produce any of the plots used in the report, their pipeline is listed below:
 
@@ -21,26 +21,26 @@ CRLB:
 2. run 'plot_CRLB': Produces the figure of the mean CRLB over the z-position
 
 FOV image:
-1. run 'combined locations'
+1. run 'combine_files_and_apply_drift_correction': this takes the drift present in each frame, and updates the position of each localization.
 
-2a. run 'compare_original_model': it produces the zoomed-in images of the FOV, and the colocalization. you can change the region that is zoomed in by changing the pixel limits
+2a. run 'compare_original_model': it produces the zoomed-in images of the FOV, and the colocalization. you can change the region that is zoomed in by changing the pixel limits (between 1 and 1024 pixels)
 
 2b. run 'Run_combined_locations': Produces the full FOV images of the HeLa Cells.
 
 Histograms (localizations):
-1. run'combined locations', or use the file it returns
+1. run 'combine_files_and_apply_drift_correction', or use the file it returns
 2. run'check_z_range_patches': it produces the histogram of the initial and second fit over z
 
 Histograms (Outliers)
 1. run 'check_outlier_positions': it takes the individual files as input
 
-Heatmap, Quiver plot, Chi-Squared: 
-run 'analyze_fiterror_and_arrows'
+Z-displacement, Quiver plot, Chi-Squared: 
+run 'analyze_fiterror_and_arrows'. Use one of the files, as the size of 'mu' and 'allspots' limits the size of data that can be accessed.
 
 Table results:
-run 'linklocs_3D_runlength_analysis': Note that you do either need to use a windows C compiler, or a Linux C compiler.
+run 'linklocs_3D_runlength_analysis': Note that you do either need to use a windows C compiler, or a Linux C compiler, to compile "cMultiFrameConnect_allcalcs3D".
 
-All files or folders that are direct copies of 'vectorfit' have 'copy' added to their file or folder name. All rights are reserved to the Imphys Department
+All files or folders that are direct copies of 'vectorfit' have 'copy' added to their file or folder name. The 'vectorfit master' zip file and instructions are available on the 'vectorfit' repository. All rights are reserved to the Imphys Department
 
 Rieger, B., Stallinga, S., Ligteringen, R., Droste, I., Martens, K., & Höppener, T. (2024). Vec-
 torfit: Matlab implementation of the vector fitting method [Accessed: 2025-06-03].
