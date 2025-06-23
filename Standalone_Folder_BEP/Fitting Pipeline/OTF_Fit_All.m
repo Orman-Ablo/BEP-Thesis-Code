@@ -14,19 +14,26 @@
 clear all
 close all
 
+params.FlagOTF = true;
+params.mult_run  = true;
+
+input_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\data\1_segmentation\segmentation_All_framesmicrotubules_3D_data0001.mat";
+if params.FlagOTF && params.mult_run
 input_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\input data\transfer_3055388_files_4e4cf1e2\";
-%input_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\Data_BEP_Roman\5_Localize";
+end
 
-path_aberrations = 'data/2_estimate_aberrations/estimated_aberrations_rep_0001_init_0001_segmentation_microtubules_3D_data0001.mat';
 
-output_path = 'C:\Users\Naam\Documents\BEP\BEP Code Roman\data\Final_Localization\';
+
+path_aberrations = "C:\Users\Naam\Documents\BEP\BEP Code Roman\data\2_estimate_aberrations\estimated_aberrations_rep_0001_init_0001_segmentation_All_framesmicrotubules_3D_data0001.mat"; % aberrations for the initial fit
 output_path = "C:\Users\Naam\Documents\BEP\BEP Code Roman\data\Localization_fullspread_alllocs\";
 params = set_parameters_microtubules_3D;
 params.cpp = false;
+params.use_fitted_aberrations = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 params.FlagOTF = true;
+params.mult_run  = true;
 
-if params.FlagOTF
+if params.FlagOTF && params.mult_run
     params.fitmodel = 'xyz'; % the current method only works on CPU
     path_aberrations = "C:\Users\Naam\Documents\BEP\BEP Code Roman\Data_BEP_Roman\All_files_data\OTF_PSF_Store_40.mat";%OTF
    
@@ -76,7 +83,7 @@ if params.check_test
 end
 
 
-for file_i= 61:80
+for file_i= 1:nr_of_files
     
     % Load data
     filename = all_input_files(file_i).name; 
@@ -88,7 +95,7 @@ for file_i= 61:80
     allspots = loaded_data.allspots;
     roixy = loaded_data.roixy;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if params.mult_run && params.FlagOTF % this statement picks the OTF fit
+    if params.mult_run && params.FlagOTF % this statement picks the OTF fit (CPU only)
 
         framelist = loaded_data.localizations_with_outliers(:,5); % frame of movie the localization is collected in
         ID = loaded_data.localizations_with_outliers(:,1); % unique ID for each localization
@@ -299,9 +306,16 @@ for file_i= 61:80
         start = (batch-1)*spots_per_batch;
         stop = min(start+spots_per_batch,Ncfg_total);
         Nspots = stop - start;
-
+        if params.mult_run && params.FlagOTF
         spots_batch = Spots_fit(:,:,:,start+1:stop);
         roixy_batch = roixy_fit(:,start+1:stop);
+        else
+        spots_batch = allspots(:,:,:,start+1:stop);
+        roixy_batch = roixy(:,start+1:stop);
+
+        end
+
+        
         
 
         if params.cpp
